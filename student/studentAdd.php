@@ -48,6 +48,26 @@
             </tr>
 
             <tr>
+                <td>Student Middle Name:</td>
+                <td><input type="text" id="studentMiddleName" name="studentMiddleName" value="<?= $_SESSION['input']['studentMiddleName'] ?? null; ?>" class="data-input"></td>
+                <td>
+                    <span>
+                        <?php echo $_SESSION['errors']['studentMiddleName'] ?? null; ?>
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 10em;">Student College Department ID:</td>
+                <td style="width: 30em;"><input type="text" id="studentCollegeDepartmentID" name="studentCollegeDepartmentID" value="<?= $_SESSION['input']['studentCollegeDepartmentID'] ?? null; ?>" class="data-input"></td>
+                <td>
+                    <span>
+                        <?php echo $_SESSION['errors']['studentCollegeDepartmentID'] ?? null; ?>
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
                 <td style="width: 10em;">Student Program ID:</td>
                 <td style="width: 30em;"><input type="text" id="studentProgramID" name="studentProgramID" value="<?= $_SESSION['input']['studentProgramID'] ?? null; ?>" class="data-input"></td>
                 <td>
@@ -56,6 +76,7 @@
                     </span>
                 </td>
             </tr>
+
             <tr>
                 <td style="width: 10em;">Student College ID:</td>
                 <td style="width: 30em;"><input type="text" id="studentCollegeID" name="studentCollegeID" value="<?= $_SESSION['input']['studentCollegeID'] ?? null; ?>" class="data-input"></td>
