@@ -26,7 +26,9 @@ $allowed_pages = [
     'processSchoolData',
     'processDataChanges',
     'chooseSchool',
+    'chooseSchoolDepProg',
     'processSchoolChoice',
+    'processSchoolDepProgChoice',
     '500',
     '404',
 ];
