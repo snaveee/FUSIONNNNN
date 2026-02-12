@@ -1,33 +1,32 @@
 <?php
-   require_once("data/db.php");
-   session_start();
-   session_destroy();
+    require_once("data/db.php");
+    session_start();
+    session_destroy();
+    
+    $limit = 3;
 
-   $limit = 3;
+    $dbStatement = $db->prepare("SELECT * FROM students");
+    $dbStatement->execute();
+    $totalStudents = $dbStatement->rowCount();
 
-   $dbStatement = $db->prepare("SELECT * FROM students");
-   $dbStatement->execute();
-   $totalStudents = $dbStatement->rowCount();
+    $totalPages = ceil($totalStudents / $limit);
 
-   $totalPages = ceil($totalStudents / $limit);
+    if(!isset($_GET['pgSection']) || !is_numeric($_GET['pgSection'])) {
+        $currentPage = 1;
+    } else {
+        $currentPage = intval($_GET['pgSection']);
+    }
 
+    $offset = ($currentPage - 1) * $limit;
 
-   if(!isset($_GET['pgSection']) || !is_numeric($_GET['pgSection'])) {
-       $currentPage = 1;
-   } else {
-       $currentPage = intval($_GET['pgSection']);
-   }
+    $dbStatement = $db->prepare("SELECT * FROM students ORDER BY studid LIMIT :offset, :limit;");
+    $dbStatement->bindParam('offset', $offset, PDO::PARAM_INT);
+    $dbStatement->bindParam('limit', $limit, PDO::PARAM_INT);
+    $dbStatement->execute();
 
-   $offset = ($currentPage - 1) * $limit;
-
-   $dbStatement = $db->prepare("SELECT * FROM students ORDER BY studcollid LIMIT :offset, :limit;");
-   $dbStatement->bindParam('offset', $offset, PDO::PARAM_INT);
-   $dbStatement->bindParam('limit', $limit, PDO::PARAM_INT);
-   $dbStatement->execute();
-
-//    $dbStatement->execute(['offset' => $offset, 'limit' => $limit]);
-   
-   $students = $dbStatement->fetchAll();
+//     $dbStatement->execute(['offset' => $offset, 'limit' => $limit]);
+    
+    $students = $dbStatement->fetchAll();
 ?>
 
 <h1>Student List</h1>
@@ -58,7 +57,7 @@
             </span>
         </td>
         <td colspan="2">
-          <?php if($totalPages > 1): ?>  
+        <?php if($totalPages > 1): ?>  
             <?php if ($currentPage > 1): ?>
                 <a href="index.php?section=student&page=studentList&pgSection=<?= $currentPage - 1 ?>" class="btn btn-primary">Previous</a>
             <?php else: ?>
@@ -69,7 +68,7 @@
             <?php else: ?>
                 <span>Next</span>
             <?php endif; ?>
-          <?php endif; ?>  
+        <?php endif; ?>  
         </td>
     </tr>
 </table>

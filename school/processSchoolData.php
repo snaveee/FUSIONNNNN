@@ -33,19 +33,19 @@ if($_POST && isset($_POST['saveNewSchoolEntry'])){
         $_SESSION['errors'] = [];
     }
 
-    if(filter_input(INPUT_POST,'schoolID', FILTER_VALIDATE_INT) === false){
+    if(filter_input(INPUT_POST,'schoolID', FILTER_VALIDATE_INT) === false) {
         $_SESSION['errors']['schoolID'] = "Invalid ID entry or format";
     } else {
         $_SESSION['errors']['schoolID'] = "";
-    } 
+    }
 
-    if(filter_input(INPUT_POST,'schoolFullName', FILTER_VALIDATE_REGEXP, ["options"=>["regexp"=>"/^[A-z\s\-]+$/"]]) === false){
+    if(filter_input(INPUT_POST,'schoolFullName', FILTER_VALIDATE_REGEXP, ["options"=>["regexp"=>"/^[A-z\s\-]+$/"]]) === false) {
         $_SESSION['errors']['schoolFullName'] = "Invalid Full Name entry or format";
     } else {
         $_SESSION['errors']['schoolFullName'] = "";
     }
 
-    if(filter_input(INPUT_POST,'schoolShortName', FILTER_VALIDATE_REGEXP, ["options"=>["regexp"=>"/^[A-z\s\-]+$/"]]) === false){
+    if(filter_input(INPUT_POST,'schoolShortName', FILTER_VALIDATE_REGEXP, ["options"=>["regexp"=>"/^[A-z\s\-]+$/"]]) === false) {
         $_SESSION['errors']['schoolShortName'] = "Invalid Short Name entry or format";
     } else {
         $_SESSION['errors']['schoolShortName'] = "";

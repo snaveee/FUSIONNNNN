@@ -1,6 +1,6 @@
 <?php
-   session_start();
-   session_regenerate_id();
+    session_start();
+    session_regenerate_id();
 ?>
 
 <!-- <!DOCTYPE html>
@@ -17,6 +17,7 @@
         <?php echo $_SESSION['messages']['createSuccess'] ?? null; ?>
         <?php echo $_SESSION['messages']['createError'] ?? null; ?>
     </span>
+
     <form action="index.php?section=student&page=processStudentData" method="post">
         <table>
             <tr>
@@ -37,6 +38,7 @@
                     </span>
                 </td>
             </tr>
+
             <tr>
                 <td>Student First Name:</td>
                 <td><input type="text" id="studentFirstName" name="studentFirstName" value="<?= $_SESSION['input']['studentFirstName'] ?? null; ?>" class="data-input"></td>
@@ -110,6 +112,4 @@
                 </td>
             </tr>
         </table>
-    </form>    
-<!-- </body>
-</html> -->
+    </form>
