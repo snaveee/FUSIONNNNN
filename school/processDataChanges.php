@@ -63,4 +63,76 @@ if($_POST && isset($_POST['saveChanges'])){
     }
 }
 
+if($_POST && isset($_POST['confirmDelete'])){
+    $schoolID = $_POST['schoolID'];
+
+    // Validate schoolID is numeric
+    if(!is_numeric($schoolID) || $schoolID <= 0){
+        $_SESSION['errors']['deleteError'] = "Invalid School ID provided";
+        header("Location: $entryURL", true, 301);
+        exit;
+    }
+
+    // Set confirmation flag in session to show confirmation page
+    $_SESSION['confirmDelete'] = true;
+    header("Location: $entryURL", true, 301);
+    exit;
+}
+
+if($_POST && isset($_POST['executeDelete'])){
+    $schoolID = $_POST['schoolID'];
+
+    if(isset($_SESSION['errors'])){
+        $_SESSION['errors'] = [];
+    }
+
+    // Validate schoolID is numeric
+    if(!is_numeric($schoolID) || $schoolID <= 0){
+        $_SESSION['errors']['deleteError'] = "Invalid School ID provided";
+        $_SESSION['confirmDelete'] = false;
+        header("Location: $entryURL", true, 301);
+        exit;
+    }
+
+    // Check if school exists before deletion
+    $dbCheckStatement = $db->prepare('SELECT collid FROM colleges WHERE collid = ?');
+    $dbCheckStatement->execute([$schoolID]);
+    $schoolExists = $dbCheckStatement->fetch();
+
+    if(!$schoolExists){
+        $_SESSION['errors']['deleteError'] = "School record not found";
+        $_SESSION['confirmDelete'] = false;
+        header("Location: $entryURL", true, 301);
+        exit;
+    }
+
+    // Check if school has associated students before deletion
+    $dbStudentCheckStatement = $db->prepare('SELECT COUNT(*) as studentCount FROM students WHERE studcollid = ?');
+    $dbStudentCheckStatement->execute([$schoolID]);
+    $studentCheck = $dbStudentCheckStatement->fetch();
+
+    if($studentCheck['studentCount'] > 0){
+        $_SESSION['errors']['deleteError'] = "Cannot delete school with existing students. Please delete all students first.";
+        $_SESSION['confirmDelete'] = false;
+        header("Location: $entryURL", true, 301);
+        exit;
+    }
+
+    // Proceed with deletion
+    $dbStatement = $db->prepare('DELETE FROM colleges WHERE collid = ?');
+    $dbResult = $dbStatement->execute([$schoolID]);
+
+    // Clear confirmation flag
+    $_SESSION['confirmDelete'] = false;
+
+    if($dbResult){
+        $_SESSION['messages']['updateSuccess'] = "School entry deleted successfully";
+        $_SESSION['messages']['updateError'] = "";
+        header("Location: index.php?section=school&page=schoolList", true, 301);
+    } else {
+        $_SESSION['errors']['deleteError'] = "Failed to delete school entry";
+        header("Location: $entryURL", true, 301);
+    }
+}
+
 ?>
